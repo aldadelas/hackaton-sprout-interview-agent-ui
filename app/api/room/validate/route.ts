@@ -49,17 +49,15 @@ export async function POST(req: Request) {
     });
   }
 
-  const defaultUrl =
-    'https://69ce0cad33a09f831b7cd3ec.mockapi.io/kuantum/validate/:id';
-  const template = process.env.ROOM_VALIDATION_URL ?? defaultUrl;
+  const template = process.env.ROOM_VALIDATION_URL;
+  if (!template) {
+    return NextResponse.json(
+      { valid: false as const, error: 'ROOM_VALIDATION_URL belum dikonfigurasi' },
+      { status: 500 }
+    );
+  }
 
-  const url = template.includes('{accessCode}')
-    ? template.replaceAll('{accessCode}', encodeURIComponent(accessCode))
-    : template.includes(':id')
-      ? template.replaceAll(':id', encodeURIComponent(accessCode))
-    : template.includes('{roomId}')
-      ? template.replaceAll('{roomId}', encodeURIComponent(accessCode))
-      : `${template.replace(/\/$/, '')}/${encodeURIComponent(accessCode)}`;
+  const url = `${template.replace(/\/+$/, '')}/${encodeURIComponent(accessCode)}`;
 
   const method = (process.env.ROOM_VALIDATION_METHOD ?? 'GET').toUpperCase();
   const headers: HeadersInit = {
