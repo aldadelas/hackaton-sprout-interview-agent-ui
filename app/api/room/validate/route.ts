@@ -40,12 +40,18 @@ export async function POST(req: Request) {
     );
   }
 
+  const buildRoomName = (sessionId: string) => {
+    const randomSuffix = Math.floor(1000 + Math.random() * 9000);
+    return `${sessionId}-${randomSuffix}`;
+  };
+
   if (process.env.SKIP_ROOM_VALIDATION === 'true') {
+    const sessionId = accessCode;
     return NextResponse.json({
       valid: true as const,
       name: 'User',
-      roomName: accessCode,
-      sessionId: accessCode,
+      roomName: buildRoomName(sessionId),
+      sessionId,
     });
   }
 
@@ -105,7 +111,6 @@ export async function POST(req: Request) {
           });
         }
 
-        const resolvedRoomName = (data.roomName ?? data.id ?? accessCode).trim();
         const resolvedName = (data.name ?? 'User').trim();
         const resolvedSessionId = (data.sessionId ?? '').trim();
 
@@ -122,17 +127,18 @@ export async function POST(req: Request) {
         return NextResponse.json({
           valid: true as const,
           name: resolvedName,
-          roomName: resolvedRoomName,
+          roomName: buildRoomName(resolvedSessionId),
           sessionId: resolvedSessionId,
         });
       }
     }
 
+    const sessionId = accessCode;
     return NextResponse.json({
       valid: true as const,
       name: 'User',
-      roomName: accessCode,
-      sessionId: accessCode,
+      roomName: buildRoomName(sessionId),
+      sessionId,
     });
   } catch (e) {
     console.error('room/validate:', e);
