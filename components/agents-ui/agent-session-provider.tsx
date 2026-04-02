@@ -1,11 +1,11 @@
-import { Room } from 'livekit-client';
+import { Room } from "livekit-client";
 import {
   RoomAudioRenderer,
   type RoomAudioRendererProps,
   SessionProvider,
   type SessionProviderProps,
   type UseSessionReturn,
-} from '@livekit/components-react';
+} from "@livekit/components-react";
 
 /**
  * Props for the AgentSessionProvider component.

@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useTheme } from 'next-themes';
-import { AnimatePresence, motion } from 'motion/react';
-import { useSessionContext } from '@livekit/components-react';
-import type { AppConfig } from '@/app-config';
-import { AgentSessionView_01 } from '@/components/agents-ui/blocks/agent-session-view-01';
-import { WelcomeView } from '@/components/app/welcome-view';
+import { useTheme } from "next-themes";
+import { AnimatePresence, motion } from "motion/react";
+import { useSessionContext } from "@livekit/components-react";
+import type { AppConfig } from "@/app-config";
+import { AgentSessionView_01 } from "@/components/agents-ui/blocks/agent-session-view-01";
+import { WelcomeView } from "@/components/app/welcome-view";
 
 const MotionWelcomeView = motion.create(WelcomeView);
 const MotionSessionView = motion.create(AgentSessionView_01);
@@ -19,12 +19,12 @@ const VIEW_MOTION_PROPS = {
       opacity: 0,
     },
   },
-  initial: 'hidden',
-  animate: 'visible',
-  exit: 'hidden',
+  initial: "hidden",
+  animate: "visible",
+  exit: "hidden",
   transition: {
     duration: 0.5,
-    ease: 'linear',
+    ease: "linear",
   },
 };
 
@@ -34,7 +34,10 @@ interface ViewControllerProps {
   displayName?: string;
 }
 
-export function ViewController({ appConfig, displayName }: ViewControllerProps) {
+export function ViewController({
+  appConfig,
+  displayName,
+}: ViewControllerProps) {
   const { isConnected, start } = useSessionContext();
   const { resolvedTheme } = useTheme();
 
@@ -61,15 +64,19 @@ export function ViewController({ appConfig, displayName }: ViewControllerProps) 
           isPreConnectBufferEnabled={appConfig.isPreConnectBufferEnabled}
           audioVisualizerType={appConfig.audioVisualizerType}
           audioVisualizerColor={
-            resolvedTheme === 'dark'
+            resolvedTheme === "dark"
               ? appConfig.audioVisualizerColorDark
               : appConfig.audioVisualizerColor
           }
           audioVisualizerColorShift={appConfig.audioVisualizerColorShift}
           audioVisualizerBarCount={appConfig.audioVisualizerBarCount}
           audioVisualizerGridRowCount={appConfig.audioVisualizerGridRowCount}
-          audioVisualizerGridColumnCount={appConfig.audioVisualizerGridColumnCount}
-          audioVisualizerRadialBarCount={appConfig.audioVisualizerRadialBarCount}
+          audioVisualizerGridColumnCount={
+            appConfig.audioVisualizerGridColumnCount
+          }
+          audioVisualizerRadialBarCount={
+            appConfig.audioVisualizerRadialBarCount
+          }
           audioVisualizerRadialRadius={appConfig.audioVisualizerRadialRadius}
           audioVisualizerWaveLineWidth={appConfig.audioVisualizerWaveLineWidth}
           className="fixed inset-0"

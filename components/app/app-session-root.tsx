@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { useEffect, useMemo } from 'react';
-import { TokenSource } from 'livekit-client';
-import { useSession } from '@livekit/components-react';
-import { WarningIcon } from '@phosphor-icons/react/dist/ssr';
-import type { AppConfig } from '@/app-config';
-import { AgentSessionProvider } from '@/components/agents-ui/agent-session-provider';
-import { StartAudioButton } from '@/components/agents-ui/start-audio-button';
-import { ViewController } from '@/components/app/view-controller';
-import { Toaster } from '@/components/ui/sonner';
-import { useAgentErrors } from '@/hooks/useAgentErrors';
-import { useDebugMode } from '@/hooks/useDebug';
-import { getSandboxTokenSource } from '@/lib/utils';
+import { useEffect, useMemo } from "react";
+import { TokenSource } from "livekit-client";
+import { useSession } from "@livekit/components-react";
+import { WarningIcon } from "@phosphor-icons/react/dist/ssr";
+import type { AppConfig } from "@/app-config";
+import { AgentSessionProvider } from "@/components/agents-ui/agent-session-provider";
+import { StartAudioButton } from "@/components/agents-ui/start-audio-button";
+import { ViewController } from "@/components/app/view-controller";
+import { Toaster } from "@/components/ui/sonner";
+import { useAgentErrors } from "@/hooks/useAgentErrors";
+import { useDebugMode } from "@/hooks/useDebug";
+import { getSandboxTokenSource } from "@/lib/utils";
 
-const IN_DEVELOPMENT = process.env.NODE_ENV !== 'production';
+const IN_DEVELOPMENT = process.env.NODE_ENV !== "production";
 
 function AppSetup() {
   useDebugMode({ enabled: IN_DEVELOPMENT });
@@ -55,22 +55,26 @@ export function AppSessionRoot({
   }, [roomMetadata]);
 
   const tokenSource = useMemo(() => {
-    return typeof process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT === 'string'
+    return typeof process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT === "string"
       ? getSandboxTokenSource(appConfig, serializedRoomMetadata)
       : TokenSource.custom(async (options) => {
-          const res = await fetch('/api/token', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+          const res = await fetch("/api/token", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               room_name: options.roomName ?? resolvedRoomName,
               room_config: {
-                ...(serializedRoomMetadata ? { metadata: serializedRoomMetadata } : {}),
+                ...(serializedRoomMetadata
+                  ? { metadata: serializedRoomMetadata }
+                  : {}),
                 ...(options.agentName || options.agentMetadata
                   ? {
                       agents: [
                         {
-                          agent_name: options.agentName ?? '',
-                          ...(options.agentMetadata ? { metadata: options.agentMetadata } : {}),
+                          agent_name: options.agentName ?? "",
+                          ...(options.agentMetadata
+                            ? { metadata: options.agentMetadata }
+                            : {}),
                         },
                       ],
                     }
@@ -85,9 +89,13 @@ export function AppSessionRoot({
   const sessionOptions = useMemo(() => {
     return {
       roomName: resolvedRoomName,
-      ...(serializedRoomMetadata ? { agentName: appConfig.agentName ?? '' } : {}),
+      ...(serializedRoomMetadata
+        ? { agentName: appConfig.agentName ?? "" }
+        : {}),
       ...(appConfig.agentName ? { agentName: appConfig.agentName } : {}),
-      ...(serializedRoomMetadata ? { agentMetadata: serializedRoomMetadata } : {}),
+      ...(serializedRoomMetadata
+        ? { agentMetadata: serializedRoomMetadata }
+        : {}),
     };
   }, [resolvedRoomName, appConfig.agentName, serializedRoomMetadata]);
 
@@ -95,7 +103,7 @@ export function AppSessionRoot({
 
   useEffect(() => {
     if (!IN_DEVELOPMENT) return;
-    console.info('[dispatch-check][client] session options', {
+    console.info("[dispatch-check][client] session options", {
       roomName: sessionOptions.roomName,
       agentName: sessionOptions.agentName,
       agentMetadata: sessionOptions.agentMetadata,
@@ -118,9 +126,9 @@ export function AppSessionRoot({
         className="toaster group"
         style={
           {
-            '--normal-bg': 'var(--popover)',
-            '--normal-text': 'var(--popover-foreground)',
-            '--normal-border': 'var(--border)',
+            "--normal-bg": "var(--popover)",
+            "--normal-text": "var(--popover-foreground)",
+            "--normal-border": "var(--border)",
           } as React.CSSProperties
         }
       />

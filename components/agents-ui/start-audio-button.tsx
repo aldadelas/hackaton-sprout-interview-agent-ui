@@ -1,22 +1,28 @@
-import { type ComponentProps } from 'react';
-import { Room } from 'livekit-client';
-import { useEnsureRoom, useStartAudio } from '@livekit/components-react';
-import { Button } from '@/components/ui/button';
+import { type ComponentProps } from "react";
+import { Room } from "livekit-client";
+import { useEnsureRoom, useStartAudio } from "@livekit/components-react";
+import { Button } from "@/components/ui/button";
 
 /**
  * Props for the StartAudioButton component.
  */
-export interface StartAudioButtonProps extends ComponentProps<'button'> {
+export interface StartAudioButtonProps extends ComponentProps<"button"> {
   /**
    * The size of the button.
    * @defaultValue 'default'
    */
-  size?: 'default' | 'sm' | 'lg' | 'icon' | 'icon-sm' | 'icon-lg';
+  size?: "default" | "sm" | "lg" | "icon" | "icon-sm" | "icon-lg";
   /**
    * The variant of the button.
    * @defaultValue 'default'
    */
-  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
+  variant?:
+    | "default"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | "link";
   /**
    * The LiveKit room instance. If not provided, uses the room from context.
    */
@@ -40,8 +46,8 @@ export interface StartAudioButtonProps extends ComponentProps<'button'> {
  * ```
  */
 export function StartAudioButton({
-  size = 'default',
-  variant = 'default',
+  size = "default",
+  variant = "default",
   label,
   room,
   ...props

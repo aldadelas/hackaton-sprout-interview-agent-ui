@@ -1,6 +1,10 @@
-import { NextResponse } from 'next/server';
-import { AccessToken, type AccessTokenOptions, type VideoGrant } from 'livekit-server-sdk';
-import { RoomConfiguration, TokenSourceRequest } from '@livekit/protocol';
+import { NextResponse } from "next/server";
+import {
+  AccessToken,
+  type AccessTokenOptions,
+  type VideoGrant,
+} from "livekit-server-sdk";
+import { RoomConfiguration, TokenSourceRequest } from "@livekit/protocol";
 
 type ConnectionDetails = {
   serverUrl: string;
@@ -18,28 +22,32 @@ const LIVEKIT_URL = process.env.LIVEKIT_URL;
 export const revalidate = 0;
 
 export async function POST(req: Request) {
-  if (process.env.NODE_ENV !== 'development') {
+  if (process.env.NODE_ENV !== "development") {
     throw new Error(
-      'THIS API ROUTE IS INSECURE. DO NOT USE THIS ROUTE IN PRODUCTION WITHOUT AN AUTHENTICATION LAYER.'
+      "THIS API ROUTE IS INSECURE. DO NOT USE THIS ROUTE IN PRODUCTION WITHOUT AN AUTHENTICATION LAYER.",
     );
   }
 
   try {
     if (LIVEKIT_URL === undefined) {
-      throw new Error('LIVEKIT_URL is not defined');
+      throw new Error("LIVEKIT_URL is not defined");
     }
     if (API_KEY === undefined) {
-      throw new Error('LIVEKIT_API_KEY is not defined');
+      throw new Error("LIVEKIT_API_KEY is not defined");
     }
     if (API_SECRET === undefined) {
-      throw new Error('LIVEKIT_API_SECRET is not defined');
+      throw new Error("LIVEKIT_API_SECRET is not defined");
     }
 
     const rawBody = await req.json();
-    const tokenRequest = TokenSourceRequest.fromJson(rawBody, { ignoreUnknownFields: true });
+    const tokenRequest = TokenSourceRequest.fromJson(rawBody, {
+      ignoreUnknownFields: true,
+    });
     const roomConfig =
       tokenRequest.roomConfig ??
-      RoomConfiguration.fromJson(rawBody?.room_config, { ignoreUnknownFields: true });
+      RoomConfiguration.fromJson(rawBody?.room_config, {
+        ignoreUnknownFields: true,
+      });
     const dispatchMetadata = roomConfig?.agents?.[0]?.metadata;
     const roomMetadata = roomConfig?.metadata;
 
@@ -50,16 +58,16 @@ export async function POST(req: Request) {
         : `voice_assistant_room_${Math.floor(Math.random() * 10_000)}`;
 
     // Generate participant token
-    const participantName = 'user';
+    const participantName = "user";
     const participantIdentity = `voice_assistant_user_${Math.floor(Math.random() * 10_000)}`;
 
     const participantToken = await createParticipantToken(
       { identity: participantIdentity, name: participantName },
       roomName,
-      roomConfig
+      roomConfig,
     );
 
-    console.info('[dispatch-check][server] token request accepted', {
+    console.info("[dispatch-check][server] token request accepted", {
       requestedRoom: requestedRoom ?? null,
       resolvedRoomName: roomName,
       hasAgentDispatchMetadata: Boolean(dispatchMetadata),
@@ -76,7 +84,7 @@ export async function POST(req: Request) {
       participantToken,
     };
     const headers = new Headers({
-      'Cache-Control': 'no-store',
+      "Cache-Control": "no-store",
     });
     return NextResponse.json(data, { headers });
   } catch (error) {
@@ -90,11 +98,11 @@ export async function POST(req: Request) {
 function createParticipantToken(
   userInfo: AccessTokenOptions,
   roomName: string,
-  roomConfig: RoomConfiguration
+  roomConfig: RoomConfiguration,
 ): Promise<string> {
   const at = new AccessToken(API_KEY, API_SECRET, {
     ...userInfo,
-    ttl: '15m',
+    ttl: "15m",
   });
   const grant: VideoGrant = {
     room: roomName,

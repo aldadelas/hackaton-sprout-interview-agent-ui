@@ -1,17 +1,24 @@
-'use client';
+"use client";
 
-import { useCallback, useEffect, useState } from 'react';
-import { Loader } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { useCallback, useEffect, useState } from "react";
+import { Loader } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export interface RoomEntryGateProps {
   /** Nama query string untuk pre-fill, mis. `accessCode` → `?accessCode=abc` */
   queryParamKey?: string;
-  onSuccess: (payload: { roomName: string; name: string; sessionId: string }) => void;
+  onSuccess: (payload: {
+    roomName: string;
+    name: string;
+    sessionId: string;
+  }) => void;
 }
 
-export function RoomEntryGate({ queryParamKey = 'accessCode', onSuccess }: RoomEntryGateProps) {
-  const [accessCode, setAccessCode] = useState('');
+export function RoomEntryGate({
+  queryParamKey = "accessCode",
+  onSuccess,
+}: RoomEntryGateProps) {
+  const [accessCode, setAccessCode] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [autoTried, setAutoTried] = useState(false);
@@ -20,15 +27,15 @@ export function RoomEntryGate({ queryParamKey = 'accessCode', onSuccess }: RoomE
     async (value: string) => {
       const trimmed = value.trim();
       if (!trimmed) {
-        setError('Masukkan password / access code');
+        setError("Masukkan password / access code");
         return;
       }
       setError(null);
       setSubmitting(true);
       try {
-        const res = await fetch('/api/room/validate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+        const res = await fetch("/api/room/validate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ accessCode: trimmed }),
         });
         const data = (await res.json()) as {
@@ -40,10 +47,10 @@ export function RoomEntryGate({ queryParamKey = 'accessCode', onSuccess }: RoomE
         };
         if (data.valid === true) {
           const resolvedRoomName = (data.roomName ?? trimmed).trim();
-          const resolvedName = (data.name ?? 'User').trim();
-          const resolvedSessionId = (data.sessionId ?? '').trim();
+          const resolvedName = (data.name ?? "User").trim();
+          const resolvedSessionId = (data.sessionId ?? "").trim();
           if (!resolvedSessionId) {
-            setError('sessionId tidak ditemukan dari API validasi');
+            setError("sessionId tidak ditemukan dari API validasi");
             return;
           }
 
@@ -54,19 +61,21 @@ export function RoomEntryGate({ queryParamKey = 'accessCode', onSuccess }: RoomE
           });
           return;
         }
-        setError(data.error ?? 'Access code tidak valid');
+        setError(data.error ?? "Access code tidak valid");
       } catch {
-        setError('Gagal memvalidasi access code');
+        setError("Gagal memvalidasi access code");
       } finally {
         setSubmitting(false);
       }
     },
-    [onSuccess]
+    [onSuccess],
   );
 
   useEffect(() => {
-    if (typeof window === 'undefined' || autoTried) return;
-    const fromQuery = new URLSearchParams(window.location.search).get(queryParamKey)?.trim();
+    if (typeof window === "undefined" || autoTried) return;
+    const fromQuery = new URLSearchParams(window.location.search)
+      .get(queryParamKey)
+      ?.trim();
     if (fromQuery) {
       setAccessCode(fromQuery);
       setAutoTried(true);
@@ -84,7 +93,10 @@ export function RoomEntryGate({ queryParamKey = 'accessCode', onSuccess }: RoomE
       className="fixed inset-0 z-[200] flex items-center justify-center bg-background/85 p-4 backdrop-blur-md"
     >
       <div className="border-input/50 bg-card text-card-foreground w-full max-w-md rounded-2xl border p-6 shadow-lg">
-        <h1 id="room-gate-title" className="text-lg font-semibold tracking-tight">
+        <h1
+          id="room-gate-title"
+          className="text-lg font-semibold tracking-tight"
+        >
           Autentikasi akses
         </h1>
         <p className="text-muted-foreground mt-1 text-sm">
@@ -118,14 +130,19 @@ export function RoomEntryGate({ queryParamKey = 'accessCode', onSuccess }: RoomE
             </p>
           ) : null}
 
-          <Button type="submit" size="lg" className="mt-1 w-full rounded-full font-mono text-xs font-bold tracking-wider uppercase" disabled={submitting}>
+          <Button
+            type="submit"
+            size="lg"
+            className="mt-1 w-full rounded-full font-mono text-xs font-bold tracking-wider uppercase"
+            disabled={submitting}
+          >
             {submitting ? (
               <>
                 <Loader className="size-4 animate-spin" aria-hidden />
                 Memvalidasi…
               </>
             ) : (
-              'Lanjut'
+              "Lanjut"
             )}
           </Button>
         </form>

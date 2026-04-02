@@ -14,7 +14,7 @@ export interface AppConfig {
   logoDark?: string;
   accentDark?: string;
 
-  audioVisualizerType?: 'bar' | 'wave' | 'grid' | 'radial' | 'aura';
+  audioVisualizerType?: "bar" | "wave" | "grid" | "radial" | "aura";
   audioVisualizerColor?: `#${string}`;
   audioVisualizerColorDark?: `#${string}`;
   audioVisualizerColorShift?: number;
@@ -43,20 +43,20 @@ export interface AppConfig {
 }
 
 export const APP_CONFIG_DEFAULTS: AppConfig = {
-  companyName: 'Kuantum Voice Agent',
-  pageTitle: 'Kuantum Voice Agent',
-  pageDescription: 'Kuantum Voice assistant',
+  companyName: "Kuantum Voice Agent",
+  pageTitle: "Kuantum Voice Agent",
+  pageDescription: "Kuantum Voice assistant",
 
   supportsChatInput: false,
   supportsVideoInput: false,
   supportsScreenShare: false,
   isPreConnectBufferEnabled: true,
 
-  logo: '/logo.svg',
-  accent: '#002cf2',
-  logoDark: '/logo-dark.svg',
-  accentDark: '#1fd5f9',
-  startButtonText: 'Start call',
+  logo: "/logo.svg",
+  accent: "#002cf2",
+  logoDark: "/logo-dark.svg",
+  accentDark: "#1fd5f9",
+  startButtonText: "Start call",
 
   // optional: audio visualization configuration
   // audioVisualizerType: 'bar',
@@ -81,5 +81,5 @@ export const APP_CONFIG_DEFAULTS: AppConfig = {
   sandboxId: undefined,
 
   requiresRoomEntry: true,
-  roomIdQueryParam: 'accessCode',
+  roomIdQueryParam: "accessCode",
 };

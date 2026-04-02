@@ -1,28 +1,33 @@
-'use client';
+"use client";
 
-import { type ComponentProps, useMemo } from 'react';
-import { type VariantProps, cva } from 'class-variance-authority';
-import { LocalAudioTrack, RemoteAudioTrack } from 'livekit-client';
-import { type AgentState, type TrackReferenceOrPlaceholder } from '@livekit/components-react';
-import { ReactShaderToy } from '@/components/agents-ui/react-shader-toy';
-import { useAgentAudioVisualizerWave } from '@/hooks/agents-ui/use-agent-audio-visualizer-wave';
-import { cn } from '@/lib/shadcn/utils';
+import { type ComponentProps, useMemo } from "react";
+import { type VariantProps, cva } from "class-variance-authority";
+import { LocalAudioTrack, RemoteAudioTrack } from "livekit-client";
+import {
+  type AgentState,
+  type TrackReferenceOrPlaceholder,
+} from "@livekit/components-react";
+import { ReactShaderToy } from "@/components/agents-ui/react-shader-toy";
+import { useAgentAudioVisualizerWave } from "@/hooks/agents-ui/use-agent-audio-visualizer-wave";
+import { cn } from "@/lib/shadcn/utils";
 
-const DEFAULT_COLOR = '#1FD5F9';
+const DEFAULT_COLOR = "#1FD5F9";
 
 function hexToRgb(hexColor: string) {
   try {
-    const rgbColor = hexColor.match(/^#([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/);
+    const rgbColor = hexColor.match(
+      /^#([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/,
+    );
 
     if (rgbColor) {
       const [, r, g, b] = rgbColor;
-      const color = [r, g, b].map((c = '00') => parseInt(c, 16) / 255);
+      const color = [r, g, b].map((c = "00") => parseInt(c, 16) / 255);
 
       return color;
     }
   } catch {
     console.error(
-      `Invalid hex color '${hexColor}'.\nFalling back to default color '${DEFAULT_COLOR}'.`
+      `Invalid hex color '${hexColor}'.\nFalling back to default color '${DEFAULT_COLOR}'.`,
     );
   }
 
@@ -196,7 +201,7 @@ interface WaveShaderProps {
 
 function WaveShader({
   speed = 10,
-  color = '#1FD5F9',
+  color = "#1FD5F9",
   colorShift = 0.05,
   mix = 1.0,
   amplitude = 0.02,
@@ -206,7 +211,7 @@ function WaveShader({
   ref,
   className,
   ...props
-}: WaveShaderProps & ComponentProps<'div'>) {
+}: WaveShaderProps & ComponentProps<"div">) {
   const rgbColor = useMemo(() => hexToRgb(color), [color]);
 
   return (
@@ -215,41 +220,41 @@ function WaveShader({
         fs={shaderSource}
         devicePixelRatio={globalThis.devicePixelRatio ?? 1}
         uniforms={{
-          uSpeed: { type: '1f', value: speed },
-          uAmplitude: { type: '1f', value: amplitude },
-          uFrequency: { type: '1f', value: frequency },
-          uMix: { type: '1f', value: mix },
-          uLineWidth: { type: '1f', value: lineWidth },
-          uSmoothing: { type: '1f', value: blur },
-          uColor: { type: '3fv', value: rgbColor },
-          uColorShift: { type: '1f', value: colorShift },
+          uSpeed: { type: "1f", value: speed },
+          uAmplitude: { type: "1f", value: amplitude },
+          uFrequency: { type: "1f", value: frequency },
+          uMix: { type: "1f", value: mix },
+          uLineWidth: { type: "1f", value: lineWidth },
+          uSmoothing: { type: "1f", value: blur },
+          uColor: { type: "3fv", value: rgbColor },
+          uColorShift: { type: "1f", value: colorShift },
         }}
         onError={(error) => {
-          console.error('Shader error:', error);
+          console.error("Shader error:", error);
         }}
         onWarning={(warning) => {
-          console.warn('Shader warning:', warning);
+          console.warn("Shader warning:", warning);
         }}
-        style={{ width: '100%', height: '100%' }}
+        style={{ width: "100%", height: "100%" }}
       />
     </div>
   );
 }
 
-WaveShader.displayName = 'WaveShader';
+WaveShader.displayName = "WaveShader";
 
-export const AgentAudioVisualizerWaveVariants = cva(['aspect-square'], {
+export const AgentAudioVisualizerWaveVariants = cva(["aspect-square"], {
   variants: {
     size: {
-      icon: 'h-[24px]',
-      sm: 'h-[56px]',
-      md: 'h-[112px]',
-      lg: 'h-[224px]',
-      xl: 'h-[448px]',
+      icon: "h-[24px]",
+      sm: "h-[56px]",
+      md: "h-[112px]",
+      lg: "h-[224px]",
+      xl: "h-[448px]",
     },
   },
   defaultVariants: {
-    size: 'lg',
+    size: "lg",
   },
 });
 
@@ -258,7 +263,7 @@ export interface AgentAudioVisualizerWaveProps {
    * The size of the visualizer.
    * @defaultValue 'lg'
    */
-  size?: 'icon' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: "icon" | "sm" | "md" | "lg" | "xl";
   /**
    * The agent state.
    * @defaultValue 'speaking'
@@ -314,8 +319,8 @@ export interface AgentAudioVisualizerWaveProps {
  * ```
  */
 export function AgentAudioVisualizerWave({
-  size = 'lg',
-  state = 'speaking',
+  size = "lg",
+  state = "speaking",
   color,
   colorShift = 0.05,
   lineWidth,
@@ -325,15 +330,15 @@ export function AgentAudioVisualizerWave({
   ref,
   ...props
 }: AgentAudioVisualizerWaveProps &
-  ComponentProps<'div'> &
+  ComponentProps<"div"> &
   VariantProps<typeof AgentAudioVisualizerWaveVariants>) {
   const _lineWidth = useMemo(() => {
     if (lineWidth !== undefined) {
       return lineWidth;
     }
     switch (size) {
-      case 'icon':
-      case 'sm':
+      case "icon":
+      case "sm":
         return 2;
       default:
         return 1;
@@ -359,8 +364,8 @@ export function AgentAudioVisualizerWave({
       blur={blur}
       className={cn(
         AgentAudioVisualizerWaveVariants({ size }),
-        'mask-[linear-gradient(90deg,transparent_0%,black_20%,black_80%,transparent_100%)]',
-        className
+        "mask-[linear-gradient(90deg,transparent_0%,black_20%,black_80%,transparent_100%)]",
+        className,
       )}
       {...props}
     />

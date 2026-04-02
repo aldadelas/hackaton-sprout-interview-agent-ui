@@ -1,41 +1,41 @@
-'use client';
+"use client";
 
-import { type CSSProperties, type ComponentProps, useMemo } from 'react';
-import { type VariantProps, cva } from 'class-variance-authority';
-import { type LocalAudioTrack, type RemoteAudioTrack } from 'livekit-client';
+import { type CSSProperties, type ComponentProps, useMemo } from "react";
+import { type VariantProps, cva } from "class-variance-authority";
+import { type LocalAudioTrack, type RemoteAudioTrack } from "livekit-client";
 import {
   type AgentState,
   type TrackReferenceOrPlaceholder,
   useMultibandTrackVolume,
-} from '@livekit/components-react';
-import { useAgentAudioVisualizerRadialAnimator } from '@/hooks/agents-ui/use-agent-audio-visualizer-radial';
-import { cn } from '@/lib/shadcn/utils';
+} from "@livekit/components-react";
+import { useAgentAudioVisualizerRadialAnimator } from "@/hooks/agents-ui/use-agent-audio-visualizer-radial";
+import { cn } from "@/lib/shadcn/utils";
 
 export const AgentAudioVisualizerRadialVariants = cva(
   [
-    'relative flex items-center justify-center',
-    '**:data-lk-index:bg-current/10',
-    '**:data-lk-index:absolute **:data-lk-index:top-1/2 **:data-lk-index:left-1/2 **:data-lk-index:origin-bottom **:data-lk-index:-translate-x-1/2',
-    '**:data-lk-index:rounded-full **:data-lk-index:transition-colors **:data-lk-index:duration-150 **:data-lk-index:ease-linear **:data-lk-index:data-[lk-highlighted=true]:bg-current',
-    'has-data-[lk-state=connecting]:**:data-lk-index:duration-300',
-    'has-data-[lk-state=initializing]:**:data-lk-index:duration-300',
-    'has-data-[lk-state=listening]:**:data-lk-index:duration-300',
-    'has-data-[lk-state=thinking]:animate-spin has-data-[lk-state=thinking]:[animation-duration:5s] has-data-[lk-state=thinking]:**:data-lk-index:bg-current',
+    "relative flex items-center justify-center",
+    "**:data-lk-index:bg-current/10",
+    "**:data-lk-index:absolute **:data-lk-index:top-1/2 **:data-lk-index:left-1/2 **:data-lk-index:origin-bottom **:data-lk-index:-translate-x-1/2",
+    "**:data-lk-index:rounded-full **:data-lk-index:transition-colors **:data-lk-index:duration-150 **:data-lk-index:ease-linear **:data-lk-index:data-[lk-highlighted=true]:bg-current",
+    "has-data-[lk-state=connecting]:**:data-lk-index:duration-300",
+    "has-data-[lk-state=initializing]:**:data-lk-index:duration-300",
+    "has-data-[lk-state=listening]:**:data-lk-index:duration-300",
+    "has-data-[lk-state=thinking]:animate-spin has-data-[lk-state=thinking]:[animation-duration:5s] has-data-[lk-state=thinking]:**:data-lk-index:bg-current",
   ],
   {
     variants: {
       size: {
-        icon: ['h-[24px] gap-[2px]'],
-        sm: ['h-[56px] gap-[4px]'],
-        md: ['h-[112px] gap-[8px]'],
-        lg: ['h-[224px] gap-[16px]'],
-        xl: ['h-[448px] gap-[32px]'],
+        icon: ["h-[24px] gap-[2px]"],
+        sm: ["h-[56px] gap-[4px]"],
+        md: ["h-[112px] gap-[8px]"],
+        lg: ["h-[224px] gap-[16px]"],
+        xl: ["h-[448px] gap-[32px]"],
       },
     },
     defaultVariants: {
-      size: 'md',
+      size: "md",
     },
-  }
+  },
 );
 
 /**
@@ -46,7 +46,7 @@ export interface AgentAudioVisualizerRadialProps {
    * The size of the visualizer.
    * @defaultValue 'md'
    */
-  size?: 'icon' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: "icon" | "sm" | "md" | "lg" | "xl";
   /**
    * The current state of the agent. Determines the animation pattern.
    * @defaultValue 'connecting'
@@ -95,8 +95,8 @@ export interface AgentAudioVisualizerRadialProps {
  * ```
  */
 export function AgentAudioVisualizerRadial({
-  size = 'md',
-  state = 'connecting',
+  size = "md",
+  state = "connecting",
   color,
   radius,
   barCount,
@@ -105,15 +105,15 @@ export function AgentAudioVisualizerRadial({
   style,
   ...props
 }: AgentAudioVisualizerRadialProps &
-  ComponentProps<'div'> &
+  ComponentProps<"div"> &
   VariantProps<typeof AgentAudioVisualizerRadialVariants>) {
   const _barCount = useMemo(() => {
     if (barCount) {
       return barCount;
     }
     switch (size) {
-      case 'icon':
-      case 'sm':
+      case "icon":
+      case "sm":
         return 12;
       default:
         return 24;
@@ -128,12 +128,12 @@ export function AgentAudioVisualizerRadial({
 
   const sequencerInterval = useMemo(() => {
     switch (state) {
-      case 'connecting':
-      case 'listening':
+      case "connecting":
+      case "listening":
         return 500;
-      case 'initializing':
+      case "initializing":
         return 250;
-      case 'thinking':
+      case "thinking":
         return Infinity;
       default:
         return 1000;
@@ -145,32 +145,34 @@ export function AgentAudioVisualizerRadial({
       return radius;
     }
     switch (size) {
-      case 'icon':
+      case "icon":
         return 6;
-      case 'xl':
+      case "xl":
         return 128;
-      case 'lg':
+      case "lg":
         return 64;
-      case 'sm':
+      case "sm":
         return 16;
-      case 'md':
+      case "md":
       default:
         return 32;
     }
   }, [size, radius]);
 
   if (_barCount % 4 !== 0) {
-    console.warn('barCount should be divisible by 4 for optimal visual results');
+    console.warn(
+      "barCount should be divisible by 4 for optimal visual results",
+    );
   }
 
   const highlightedIndices = useAgentAudioVisualizerRadialAnimator(
     state,
     _barCount,
-    sequencerInterval
+    sequencerInterval,
   );
   const bands = useMemo(
     () => (audioTrack ? volumeBands : new Array(_barCount).fill(0)),
-    [audioTrack, volumeBands, _barCount]
+    [audioTrack, volumeBands, _barCount],
   );
 
   const dotSize = useMemo(() => {
@@ -180,7 +182,11 @@ export function AgentAudioVisualizerRadial({
   return (
     <div
       data-lk-state={state}
-      className={cn(AgentAudioVisualizerRadialVariants({ size }), 'relative', className)}
+      className={cn(
+        AgentAudioVisualizerRadialVariants({ size }),
+        "relative",
+        className,
+      )}
       style={{ ...style, color } as CSSProperties}
       {...props}
     >
@@ -193,7 +199,7 @@ export function AgentAudioVisualizerRadial({
             data-lk-state={state}
             className="absolute top-1/2 left-1/2 h-1 w-1 -translate-x-1/2 -translate-y-1/2"
             style={{
-              transformOrigin: 'center',
+              transformOrigin: "center",
               transform: `rotate(${angle}rad) translateY(${distanceFromCenter}px)`,
             }}
           >
@@ -203,7 +209,7 @@ export function AgentAudioVisualizerRadial({
               style={{
                 width: dotSize,
                 minHeight: dotSize,
-                height: state === 'speaking' ? `${dotSize * 10 * band}px` : 0,
+                height: state === "speaking" ? `${dotSize * 10 * band}px` : 0,
               }}
             />
           </div>
